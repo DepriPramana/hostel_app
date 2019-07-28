@@ -133,7 +133,7 @@ class _HomePageState extends State<HomePage> {
             child: status == "yes"
                 ? EditPage()
                 : userType == "Provider"
-                    ? ProviderPage(state: state)
+                    ? ProviderPage()
                     : UserPage(state: state)
           );
         });

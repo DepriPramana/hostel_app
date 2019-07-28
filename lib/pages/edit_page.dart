@@ -38,6 +38,9 @@ class _EditPageState extends State<EditPage> {
   initState(){
     super.initState();
     _isLoading = false;
+    setState(() {
+
+    });
   }
 
   _signOut() async {

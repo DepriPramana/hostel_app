@@ -11,8 +11,6 @@ import 'hostel_page.dart';
 import 'login_page.dart';
 
 class ProviderPage extends StatefulWidget {
-  final ChangeThemeState state;
-  ProviderPage({this.state});
 
   @override
   _ProviderPageState createState() => _ProviderPageState();
@@ -34,35 +32,40 @@ class _ProviderPageState extends State<ProviderPage> {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-        length: 2,
-        initialIndex: 0,
-        child: Scaffold(
-          drawer: Drawer(child: SettingsPageTwo()),
-          appBar: AppBar(
-            backgroundColor: widget.state.themeData.primaryColor,
-            title: Text('Hostel App',
-                style: widget.state.themeData.textTheme.headline),
-            bottom: PreferredSize(
-              preferredSize: Size.fromHeight(40.0),
-              child: TabBar(
-                indicatorColor: widget.state.themeData.accentColor,
-                tabs: <Widget>[Tab(text: "Hostels"), Tab(text: "User Request")],
-              ),
-            ),
-            actions: <Widget>[
-              FlatButton(
-                  child: Text('Logout',
-                      style: widget.state.themeData.textTheme.caption),
-                  onPressed: _signOut)
-            ],
-          ),
-          body: TabBarView(
-            children: <Widget>[
-              HostelPage(),
-              RequestPage()
-            ],
-          ),
-        ));
+    return BlocBuilder(
+        bloc: changeThemeBloc,
+        builder: (BuildContext context, ChangeThemeState state){
+          return DefaultTabController(
+              length: 2,
+              initialIndex: 0,
+              child: Scaffold(
+                drawer: Drawer(child: SettingsPageTwo()),
+                appBar: AppBar(
+                  backgroundColor: state.themeData.primaryColor,
+                  title: Text('Hostel App',
+                      style: state.themeData.textTheme.headline),
+                  bottom: PreferredSize(
+                    preferredSize: Size.fromHeight(40.0),
+                    child: TabBar(
+                      indicatorColor: state.themeData.accentColor,
+                      tabs: <Widget>[Tab(text: "Hostels"), Tab(text: "User Request")],
+                    ),
+                  ),
+                  actions: <Widget>[
+                    FlatButton(
+                        child: Text('Logout',
+                            style: state.themeData.textTheme.caption),
+                        onPressed: _signOut)
+                  ],
+                ),
+                body: TabBarView(
+                  children: <Widget>[
+                    HostelPage(),
+                    RequestPage()
+                  ],
+                ),
+              ));
+        }
+    );
   }
 }

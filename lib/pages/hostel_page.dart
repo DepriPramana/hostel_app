@@ -1,9 +1,12 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hostel_app/bloc/change_theme_bloc.dart';
 import 'package:hostel_app/bloc/change_theme_state.dart';
+import 'package:hostel_app/model/hostel.dart';
 
 import 'add_data_page.dart';
+import 'hostel_detail_page.dart';
 
 class HostelPage extends StatefulWidget {
   @override
@@ -11,6 +14,39 @@ class HostelPage extends StatefulWidget {
 }
 
 class _HostelPageState extends State<HostelPage> {
+  List<Hostels> _hostelList = [];
+
+  Future fetchHostels() async {
+    DatabaseReference reference =
+        await FirebaseDatabase.instance.reference().child("Hostels");
+    reference.once().then((DataSnapshot snapshot) {
+      var keys = snapshot.value.keys;
+      var data = snapshot.value;
+      _hostelList.clear();
+      for (var singleKey in keys) {
+        Hostels hostels = new Hostels(
+          data[singleKey]["contact_number"],
+          data[singleKey]["hostel_facilities"],
+          data[singleKey]["hostel_name"],
+          data[singleKey]["hostel_pic"],
+          data[singleKey]["location_name"],
+          data[singleKey]["no_of_room"],
+          data[singleKey]["price_per_head"],
+          data[singleKey]["provider_id"],
+          data[singleKey]["provider_name"],
+        );
+        _hostelList.add(hostels);
+      }
+      setState(() {});
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchHostels();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder(
@@ -26,6 +62,66 @@ class _HostelPageState extends State<HostelPage> {
                         builder: (BuildContext context) => AddDataPage()));
               },
               child: Icon(Icons.add, color: state.themeData.accentColor),
+            ),
+            body: Container(
+              color: state.themeData.primaryColor.withOpacity(0.8),
+              child: _hostelList.length == 0
+                  ? Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : ListView.builder(
+                      physics: BouncingScrollPhysics(),
+                      itemCount: _hostelList.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=> HostelDetailPage(_hostelList, index)));
+                            },
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(8.0),
+                              child: Container(
+                                width: MediaQuery.of(context).size.width,
+                                height: 200.0,
+                                color: state.themeData.splashColor,
+                                child: Column(
+                                  children: <Widget>[
+                                    Expanded(
+                                      flex: 1,
+                                      child: Container(
+                                        width: MediaQuery.of(context).size.width,
+                                        child: Hero(
+                                          tag: _hostelList[index].hostel_pic,
+                                          child: FadeInImage(
+                                            image: NetworkImage(_hostelList[index].hostel_pic),
+                                            fit: BoxFit.cover,
+                                            placeholder: AssetImage('assets/loading.gif'),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 0,
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: <Widget>[
+                                            Text(_hostelList[index].hostel_name, style: state.themeData.textTheme.caption),
+                                            Text(_hostelList[index].location_name, style: state.themeData.textTheme.caption),
+                                          ],
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      }),
             ),
           );
         });

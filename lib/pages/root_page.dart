@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hostel_app/utils/auth.dart';
+import 'package:hostel_app/services/auth.dart';
 
 import 'home_page.dart';
 import 'login_page.dart';

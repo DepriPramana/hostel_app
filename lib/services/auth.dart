@@ -33,7 +33,10 @@ class Auth implements BaseAuth {
       "first_name": "",
       "last_name": "",
       "email": email,
-      "userType": type
+      "userType": type,
+      "phone_no": "",
+      "profile_pic": ""
+
     };
     reference.child("Users").child(user?.uid).set(data).whenComplete(() => "Registered");
     return user.uid;

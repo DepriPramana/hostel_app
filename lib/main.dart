@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hostel_app/utils/auth.dart';
+import 'package:hostel_app/services/auth.dart';
 
 import 'bloc/change_theme_bloc.dart';
 import 'bloc/change_theme_state.dart';
@@ -16,13 +16,29 @@ class MyApp extends StatelessWidget {
         bloc: changeThemeBloc,
         builder: (BuildContext context, ChangeThemeState state){
           return MaterialApp(
-              debugShowCheckedModeBanner: false,
-              theme: ThemeData(
-                  primarySwatch: Colors.blue, canvasColor: Colors.transparent),
-              title: 'Hostel App',
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData(
+                primarySwatch: Colors.blue, canvasColor: Colors.transparent),
+            title: 'Hostel App',
               home: RootPage(auth: new Auth())
           );
         }
+    );
+  }
+}
+
+class MyHome extends StatefulWidget {
+  @override
+  _MyHomeState createState() => _MyHomeState();
+}
+
+class _MyHomeState extends State<MyHome> {
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      child: Center(
+        child: Text("Salaam Pakistan"),
+      ),
     );
   }
 }

@@ -10,15 +10,18 @@ import 'package:hostel_app/bloc/change_theme_state.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
-//import 'package:image_picker/image_picker.dart';
 
 import 'home_page.dart';
 import 'login_page.dart';
 
 class EditPage extends StatefulWidget {
 
+  final String radioValue;
+
+  EditPage({this.radioValue});
+
   @override
-  _EditPageState createState() => _EditPageState();
+  _EditPageState createState() => _EditPageState(radioValue: radioValue);
 }
 
 class _EditPageState extends State<EditPage> {
@@ -28,6 +31,9 @@ class _EditPageState extends State<EditPage> {
   String _phoneno;
   File _image;
   bool _isLoading;
+  String radioValue;
+
+  _EditPageState({this.radioValue});
 
   initState(){
     super.initState();
@@ -61,6 +67,7 @@ class _EditPageState extends State<EditPage> {
       _isLoading = true;
     });
     if (_validateAndSave() && _image != null) {
+      SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
       DatabaseReference reference = await FirebaseDatabase.instance.reference();
       FirebaseUser currentUser = await FirebaseAuth.instance.currentUser();
       StorageReference ref = await
@@ -72,10 +79,10 @@ class _EditPageState extends State<EditPage> {
         "first_name": _name,
         "last_name": _surname,
         "phone_no": _phoneno,
-        "profile_pic": downloadUrl.toString()
+        "profile_pic": downloadUrl.toString(),
+        "userType": radioValue
       };
       reference.child("Users").child(currentUser.uid).set(data).whenComplete(() => "Uploaded");
-      SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
       sharedPreferences.clear();
       Navigator.of(context).pushAndRemoveUntil(
           new MaterialPageRoute(
@@ -135,11 +142,8 @@ class _EditPageState extends State<EditPage> {
   Widget _showCircularProgress() {
     if (_isLoading) {
       return Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
         margin: EdgeInsets.only(bottom: 20.0),
         child: CircularProgressIndicator(),
-        alignment: Alignment.bottomCenter,
       );
     }
     return Container(
@@ -158,13 +162,13 @@ class _EditPageState extends State<EditPage> {
           SizedBox(height: 5.0),
           Container(
             decoration: BoxDecoration(
-              color: state.themeData.primaryColor,
+              color: state.themeData.accentColor,
               borderRadius: BorderRadius.circular(3.0),
             ),
             child: Padding(
               padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
               child: new TextFormField(
-                style: state.themeData.textTheme.caption,
+                style: state.themeData.textTheme.display1,
                 decoration: InputDecoration(border: InputBorder.none),
                 maxLines: 1,
                 keyboardType: TextInputType.phone,
@@ -190,13 +194,13 @@ class _EditPageState extends State<EditPage> {
           SizedBox(height: 5.0),
           Container(
             decoration: BoxDecoration(
-              color: state.themeData.primaryColor,
+              color: state.themeData.accentColor,
               borderRadius: BorderRadius.circular(3.0),
             ),
             child: Padding(
               padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
               child: new TextFormField(
-                style: state.themeData.textTheme.caption,
+                style: state.themeData.textTheme.display1,
                 decoration: InputDecoration(border: InputBorder.none),
                 maxLines: 1,
                 keyboardType: TextInputType.text,
@@ -222,13 +226,13 @@ class _EditPageState extends State<EditPage> {
           SizedBox(height: 5.0),
           Container(
             decoration: BoxDecoration(
-              color: state.themeData.primaryColor,
+              color: state.themeData.accentColor,
               borderRadius: BorderRadius.circular(3.0),
             ),
             child: Padding(
               padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
               child: new TextFormField(
-                style: state.themeData.textTheme.caption,
+                style: state.themeData.textTheme.display1,
                 decoration: InputDecoration(border: InputBorder.none),
                 maxLines: 1,
                 keyboardType: TextInputType.text,
@@ -259,13 +263,13 @@ class _EditPageState extends State<EditPage> {
       child: InkWell(
         onTap: getImage,
         child: _image == null ? CircleAvatar(
-          backgroundColor: state.themeData.primaryColor,
-          foregroundColor: state.themeData.primaryColor,
+          backgroundColor: state.themeData.accentColor,
+          foregroundColor: state.themeData.accentColor,
           radius: 70.0,
-          child: Icon(Icons.add_a_photo, color: state.themeData.accentColor, size: 30.0),
+          child: Icon(Icons.add_a_photo, color: state.themeData.primaryColor, size: 30.0),
         ): CircleAvatar(
-          backgroundColor: state.themeData.primaryColor,
-          foregroundColor: state.themeData.primaryColor,
+          backgroundColor: state.themeData.accentColor,
+          foregroundColor: state.themeData.accentColor,
           radius: 70.0,
           backgroundImage: FileImage(_image),
         ),

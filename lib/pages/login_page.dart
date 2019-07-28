@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hostel_app/bloc/change_theme_bloc.dart';
 import 'package:hostel_app/bloc/change_theme_state.dart';
 import 'package:hostel_app/pages/settings.dart';
-import 'package:hostel_app/utils/auth.dart';
+import 'package:hostel_app/services/auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'edit_page.dart';
@@ -72,7 +72,7 @@ class _LoginSignUpPageState extends State<LoginSignUpPage> {
           print(sharedPreferences.getString("status"));
           Navigator.of(context).pushAndRemoveUntil(
               new MaterialPageRoute(
-                  builder: (BuildContext context) => EditPage()),
+                  builder: (BuildContext context) => EditPage(radioValue: _radioValue)),
               (Route<dynamic> route) => false);
           print('Signed up user: $userId');
         }
@@ -195,7 +195,6 @@ class _LoginSignUpPageState extends State<LoginSignUpPage> {
               _showPrimaryButton(state),
               SizedBox(height: 10.0),
               _showSecondaryButton(),
-              SizedBox(height: 20.0),
               _showErrorMessage(),
               SettingsPage()
             ],
@@ -280,12 +279,10 @@ class _LoginSignUpPageState extends State<LoginSignUpPage> {
         child: CircleAvatar(
           backgroundColor: Colors.transparent,
           radius: 48.0,
-          child: Image(
-            image: NetworkImage(
-                "https://hostelmanagement.com/sites/default/files/hostel-management-title-%20logo.png"),
-            fit: BoxFit.fill,
-          ),
-        ),
+          child: FadeInImage(placeholder: AssetImage('assets/loading.gif'), image: AssetImage(
+              "assets/logo.png"),
+          fit: BoxFit.fill,
+        ))
       ),
     );
   }

@@ -1,12 +1,13 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hostel_app/bloc/change_theme_bloc.dart';
 import 'package:hostel_app/bloc/change_theme_state.dart';
 import 'package:hostel_app/pages/edit_page.dart';
-import 'dart:async';
-
-import 'package:hostel_app/utils/auth.dart';
+import 'package:hostel_app/pages/provider_page.dart';
+import 'package:hostel_app/pages/user_page.dart';
+import 'package:hostel_app/services/auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
@@ -24,23 +25,16 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  _signOut() async {
-    try {
-      await widget.auth.signOut();
-      widget.onSignedOut();
-    } catch (e) {
-      print(e);
-    }
-  }
-
   bool _isEmailVerified = false;
   String userId = "";
+  String userType = "";
 
   @override
   void initState() {
     super.initState();
     _checkEmailVerification();
     checkStatus();
+    checkUserType();
   }
 
   void _checkEmailVerification() async {
@@ -113,6 +107,23 @@ class _HomePageState extends State<HomePage> {
     print(status);
   }
 
+  checkUserType() async {
+    FirebaseUser currentUser = await FirebaseAuth.instance.currentUser();
+    userId = currentUser.uid;
+    DatabaseReference reference = await FirebaseDatabase.instance.reference();
+    reference
+        .child("Users")
+        .child(userId)
+        .child("userType")
+        .once()
+        .then((DataSnapshot snapshot) {
+      setState(() {
+        userType = snapshot.value.toString();
+        print(userType);
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder(
@@ -121,20 +132,9 @@ class _HomePageState extends State<HomePage> {
           return SafeArea(
             child: status == "yes"
                 ? EditPage()
-                : Scaffold(
-                    appBar: AppBar(
-                      backgroundColor: state.themeData.primaryColor,
-                      title: Text('Hostel App',
-                          style: state.themeData.textTheme.headline),
-                      actions: <Widget>[
-                        FlatButton(
-                            child: Text('Logout',
-                                style: state.themeData.textTheme.caption),
-                            onPressed: _signOut)
-                      ],
-                    ),
-              
-                  ),
+                : userType == "Provider"
+                    ? ProviderPage(state: state)
+                    : UserPage(state: state)
           );
         });
   }

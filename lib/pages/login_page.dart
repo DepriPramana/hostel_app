@@ -51,11 +51,11 @@ class _LoginSignUpPageState extends State<LoginSignUpPage> {
   }
 
   void _validateAndSubmit() async {
-    setState(() {
-      _errorMessage = "";
-      _isLoading = true;
-    });
     if (_validateAndSave()) {
+      setState(() {
+        _errorMessage = "";
+        _isLoading = true;
+      });
       String userId = "";
       try {
         SharedPreferences sharedPreferences =

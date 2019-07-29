@@ -42,8 +42,8 @@ class _ProviderPageState extends State<ProviderPage> {
                 drawer: Drawer(child: SettingsPageTwo()),
                 appBar: AppBar(
                   backgroundColor: state.themeData.primaryColor,
-                  title: Text('Hostel App',
-                      style: state.themeData.textTheme.headline),
+                  title: Text('Room Sharing App',
+                      style: state.themeData.textTheme.body1),
                   bottom: PreferredSize(
                     preferredSize: Size.fromHeight(40.0),
                     child: TabBar(

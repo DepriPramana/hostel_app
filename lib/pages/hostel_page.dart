@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,10 +16,12 @@ class HostelPage extends StatefulWidget {
 
 class _HostelPageState extends State<HostelPage> {
   List<Hostels> _hostelList = [];
+  String _currentHostelId = "";
 
   Future fetchHostels() async {
-    DatabaseReference reference =
-        await FirebaseDatabase.instance.reference().child("Hostels");
+    FirebaseUser currentUser = await FirebaseAuth.instance.currentUser();
+    Query reference =
+        await FirebaseDatabase.instance.reference().child("Hostels").orderByChild("provider_id").equalTo(currentUser.uid);
     reference.once().then((DataSnapshot snapshot) {
       var keys = snapshot.value.keys;
       var data = snapshot.value;
@@ -27,6 +30,7 @@ class _HostelPageState extends State<HostelPage> {
         Hostels hostels = new Hostels(
           data[singleKey]["contact_number"],
           data[singleKey]["hostel_facilities"],
+          data[singleKey]["hostel_id"],
           data[singleKey]["hostel_name"],
           data[singleKey]["hostel_pic"],
           data[singleKey]["location_name"],
@@ -36,6 +40,7 @@ class _HostelPageState extends State<HostelPage> {
           data[singleKey]["provider_name"],
         );
         _hostelList.add(hostels);
+        reference.keepSynced(true);
       }
       setState(() {});
     });
@@ -65,7 +70,7 @@ class _HostelPageState extends State<HostelPage> {
             ),
             body: Container(
               color: state.themeData.primaryColor.withOpacity(0.8),
-              child: _hostelList.length == 0
+              child: _hostelList == null
                   ? Center(
                       child: CircularProgressIndicator(),
                     )
@@ -77,7 +82,11 @@ class _HostelPageState extends State<HostelPage> {
                           padding: const EdgeInsets.all(15.0),
                           child: GestureDetector(
                             onTap: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context)=> HostelDetailPage(_hostelList, index)));
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => HostelDetailPage(
+                                          data: _hostelList, index: index)));
                             },
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(8.0),
@@ -90,27 +99,51 @@ class _HostelPageState extends State<HostelPage> {
                                     Expanded(
                                       flex: 1,
                                       child: Container(
-                                        width: MediaQuery.of(context).size.width,
+                                        width:
+                                            MediaQuery.of(context).size.width,
                                         child: Hero(
                                           tag: _hostelList[index].hostel_pic,
-                                          child: FadeInImage(
-                                            image: NetworkImage(_hostelList[index].hostel_pic),
-                                            fit: BoxFit.cover,
-                                            placeholder: AssetImage('assets/loading.gif'),
-                                          ),
+                                          child:
+                                              _hostelList[index].hostel_pic ==
+                                                      null
+                                                  ? Image.asset(
+                                                      'assets/na.jpg',
+                                                      fit: BoxFit.cover,
+                                                    )
+                                                  : FadeInImage(
+                                                      image: NetworkImage(
+                                                          _hostelList[index]
+                                                              .hostel_pic),
+                                                      fit: BoxFit.cover,
+                                                      placeholder: AssetImage(
+                                                          'assets/loading.gif'),
+                                                    ),
                                         ),
                                       ),
                                     ),
                                     Expanded(
                                       flex: 0,
                                       child: Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 10.0, vertical: 10.0),
                                         child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: <Widget>[
-                                            Text(_hostelList[index].hostel_name, style: state.themeData.textTheme.caption),
-                                            Text(_hostelList[index].location_name, style: state.themeData.textTheme.caption),
+                                            Flexible(
+                                              child: Text(_hostelList[index].hostel_name,
+                                                  style: state.themeData.textTheme
+                                                      .caption),
+                                            ),
+                                            Flexible(
+                                              child: Text(
+                                                  _hostelList[index]
+                                                      .location_name,
+                                                  style: state.themeData.textTheme
+                                                      .caption),
+                                            ),
                                           ],
                                         ),
                                       ),

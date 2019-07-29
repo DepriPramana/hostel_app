@@ -36,6 +36,8 @@ class _AddDataPageState extends State<AddDataPage> {
   List<String> facilities;
   bool _isLoading = false;
 
+  String _currentHostelId = "";
+
   Future getImage() async {
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
 
@@ -73,17 +75,16 @@ class _AddDataPageState extends State<AddDataPage> {
           SizedBox(height: 5.0),
           Container(
             decoration: BoxDecoration(
-              color: state.themeData.accentColor,
+              color: state.themeData.splashColor,
               borderRadius: BorderRadius.circular(3.0),
             ),
             child: Padding(
               padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
               child: new TextFormField(
-                style: state.themeData.textTheme.display1,
+                style: state.themeData.textTheme.body2,
                 decoration: InputDecoration(border: InputBorder.none),
                 maxLines: 1,
                 keyboardType: TextInputType.text,
-                autofocus: false,
                 validator: (value) =>
                     value.isEmpty ? 'Name can\'t be empty' : null,
                 onSaved: (value) => _hostelName = value.trim(),
@@ -105,17 +106,16 @@ class _AddDataPageState extends State<AddDataPage> {
           SizedBox(height: 5.0),
           Container(
             decoration: BoxDecoration(
-              color: state.themeData.accentColor,
+              color: state.themeData.splashColor,
               borderRadius: BorderRadius.circular(3.0),
             ),
             child: Padding(
               padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
               child: new TextFormField(
-                style: state.themeData.textTheme.display1,
+                style: state.themeData.textTheme.body2,
                 decoration: InputDecoration(border: InputBorder.none),
                 maxLines: 1,
                 keyboardType: TextInputType.text,
-                autofocus: false,
                 validator: (value) =>
                     value.isEmpty ? 'Location can\'t be empty' : null,
                 onSaved: (value) => _locationName = value.trim(),
@@ -137,18 +137,17 @@ class _AddDataPageState extends State<AddDataPage> {
           SizedBox(height: 5.0),
           Container(
             decoration: BoxDecoration(
-              color: state.themeData.accentColor,
+              color: state.themeData.splashColor,
               borderRadius: BorderRadius.circular(3.0),
             ),
             child: Padding(
               padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
               child: new TextFormField(
-                style: state.themeData.textTheme.display1,
+                style: state.themeData.textTheme.body2,
                 decoration: InputDecoration(border: InputBorder.none),
                 maxLines: 1,
                 maxLength: 2,
                 keyboardType: TextInputType.number,
-                autofocus: false,
                 validator: (value) =>
                     value.isEmpty ? 'Room No can\'t be empty' : null,
                 onSaved: (value) => _numOfRooms = value.trim(),
@@ -170,18 +169,17 @@ class _AddDataPageState extends State<AddDataPage> {
           SizedBox(height: 5.0),
           Container(
             decoration: BoxDecoration(
-              color: state.themeData.accentColor,
+              color: state.themeData.splashColor,
               borderRadius: BorderRadius.circular(3.0),
             ),
             child: Padding(
               padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
               child: new TextFormField(
-                style: state.themeData.textTheme.display1,
+                style: state.themeData.textTheme.body2,
                 decoration: InputDecoration(border: InputBorder.none),
                 maxLines: 1,
                 maxLength: 4,
                 keyboardType: TextInputType.number,
-                autofocus: false,
                 validator: (value) =>
                     value.isEmpty ? 'Price can\'t be empty' : null,
                 onSaved: (value) => _pricePerHead = value.trim(),
@@ -203,18 +201,17 @@ class _AddDataPageState extends State<AddDataPage> {
           SizedBox(height: 5.0),
           Container(
             decoration: BoxDecoration(
-              color: state.themeData.accentColor,
+              color: state.themeData.splashColor,
               borderRadius: BorderRadius.circular(3.0),
             ),
             child: Padding(
               padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
               child: new TextFormField(
-                style: state.themeData.textTheme.display1,
+                style: state.themeData.textTheme.body2,
                 decoration: InputDecoration(border: InputBorder.none),
                 maxLines: 1,
                 maxLength: 11,
                 keyboardType: TextInputType.phone,
-                autofocus: false,
                 validator: (value) =>
                     value.isEmpty ? 'Contact can\'t be empty' : null,
                 onSaved: (value) => _contact = value.trim(),
@@ -237,7 +234,7 @@ class _AddDataPageState extends State<AddDataPage> {
             });
           },
         ),
-        Text("Generator", style: state.themeData.textTheme.display1),
+        Text("Generator", style: state.themeData.textTheme.body2),
       ],
     );
   }
@@ -253,7 +250,7 @@ class _AddDataPageState extends State<AddDataPage> {
             });
           },
         ),
-        Text("Internet", style: state.themeData.textTheme.display1),
+        Text("Internet", style: state.themeData.textTheme.body2),
       ],
     );
   }
@@ -269,7 +266,7 @@ class _AddDataPageState extends State<AddDataPage> {
             });
           },
         ),
-        Text("Meal", style: state.themeData.textTheme.display1),
+        Text("Meal", style: state.themeData.textTheme.body2),
       ],
     );
   }
@@ -285,7 +282,7 @@ class _AddDataPageState extends State<AddDataPage> {
             });
           },
         ),
-        Text("Laundry", style: state.themeData.textTheme.display1),
+        Text("Laundry", style: state.themeData.textTheme.body2),
       ],
     );
   }
@@ -300,7 +297,7 @@ class _AddDataPageState extends State<AddDataPage> {
           SizedBox(height: 5.0),
           Container(
             decoration: BoxDecoration(
-              color: state.themeData.accentColor,
+              color: state.themeData.splashColor,
               borderRadius: BorderRadius.circular(3.0),
             ),
             child: Wrap(
@@ -389,18 +386,24 @@ class _AddDataPageState extends State<AddDataPage> {
         "hostel_pic": downloadUrl,
         "hostel_facilities": getFacilities()
       };
-      reference
+      _currentHostelId = reference
           .child("Hostels")
-          .push()
-          .set(data)
-          .whenComplete(() => "Uploaded");
+          .push().key;
+          reference.child("Hostels").child(_currentHostelId).set(data).whenComplete(()=> {
+
+          });
+          Map<String,dynamic> data1 = {
+            "hostel_id": _currentHostelId
+          };
+      DatabaseReference reference2 = await FirebaseDatabase.instance.reference();
+          reference2.child("Hostels").child(_currentHostelId).update(data1).whenComplete(()=> "");
       setState(() {
         _isLoading = false;
       });
       Navigator.of(context).pushAndRemoveUntil(
           new MaterialPageRoute(
               builder: (BuildContext context) => ProviderPage()),
-              (Route<dynamic> route) => false);
+          (Route<dynamic> route) => false);
     } else {
       setState(() {
         _isLoading = false;
@@ -419,15 +422,15 @@ class _AddDataPageState extends State<AddDataPage> {
             appBar: AppBar(
               backgroundColor: state.themeData.primaryColor,
               title:
-                  Text("Hostel App", style: state.themeData.textTheme.headline),
+                  Text("Room Sharing App", style: state.themeData.textTheme.headline),
               actions: <Widget>[
                 _isLoading
                     ? Container(
-                  margin: EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 15.0),
-                  width: 20.0,
-                  height: 20.0,
-                  child: CircularProgressIndicator(),
-                )
+                        margin: EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 15.0),
+                        width: 20.0,
+                        height: 20.0,
+                        child: CircularProgressIndicator(),
+                      )
                     : IconButton(
                         onPressed: _validateAndSubmit,
                         icon: Icon(Icons.done),

@@ -119,7 +119,7 @@ class _HomePageState extends State<HomePage> {
         .then((DataSnapshot snapshot) {
       setState(() {
         userType = snapshot.value.toString();
-        print(userType);
+        reference.keepSynced(true);
       });
     });
   }

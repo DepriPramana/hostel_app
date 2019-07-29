@@ -17,28 +17,12 @@ class MyApp extends StatelessWidget {
         builder: (BuildContext context, ChangeThemeState state){
           return MaterialApp(
             debugShowCheckedModeBanner: false,
-            theme: ThemeData(
-                primarySwatch: Colors.blue, canvasColor: Colors.transparent),
-            title: 'Hostel App',
+              theme: ThemeData(
+                  primarySwatch: Colors.blue, canvasColor: Colors.transparent),
+            title: 'Room Sharing App',
               home: RootPage(auth: new Auth())
           );
         }
-    );
-  }
-}
-
-class MyHome extends StatefulWidget {
-  @override
-  _MyHomeState createState() => _MyHomeState();
-}
-
-class _MyHomeState extends State<MyHome> {
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      child: Center(
-        child: Text("Salaam Pakistan"),
-      ),
     );
   }
 }

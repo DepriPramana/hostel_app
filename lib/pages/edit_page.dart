@@ -87,6 +87,7 @@ class _EditPageState extends State<EditPage> {
       };
       reference.child("Users").child(currentUser.uid).set(data).whenComplete(() => "Uploaded");
       sharedPreferences.clear();
+      reference.keepSynced(true);
       Navigator.of(context).pushAndRemoveUntil(
           new MaterialPageRoute(
               builder: (BuildContext context) => HomePage()),

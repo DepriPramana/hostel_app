@@ -6,20 +6,20 @@ import 'package:hostel_app/bloc/change_theme_bloc.dart';
 import 'package:hostel_app/bloc/change_theme_state.dart';
 import 'package:hostel_app/model/hostel.dart';
 import 'package:hostel_app/widget/scrolling_rooms.dart';
+import 'package:hostel_app/widget/scrolling_rooms_user.dart';
 
-import 'add_room_page.dart';
-
-class HostelDetailPage extends StatefulWidget {
+class UserHostelDetailPage extends StatefulWidget {
   final List<Hostels> data;
   final int index;
 
-  HostelDetailPage({this.data, this.index});
+  UserHostelDetailPage({this.data, this.index});
 
   @override
-  _HostelDetailPageState createState() => _HostelDetailPageState();
+  _UserHostelDetailPageState createState() => _UserHostelDetailPageState();
 }
 
-class _HostelDetailPageState extends State<HostelDetailPage> {
+class _UserHostelDetailPageState extends State<UserHostelDetailPage> {
+
   String _userPic = "";
 
   @override
@@ -31,15 +31,15 @@ class _HostelDetailPageState extends State<HostelDetailPage> {
   Future getUserData() async {
     FirebaseUser currentUser = await FirebaseAuth.instance.currentUser();
     DatabaseReference reference =
-        await FirebaseDatabase.instance.reference().child("Users");
+    await FirebaseDatabase.instance.reference().child("Users");
     reference
         .child(currentUser.uid)
         .child("profile_pic")
         .once()
         .then((DataSnapshot snapshot) {
       setState(() {
-        _userPic = snapshot.value.toString();
         reference.keepSynced(true);
+        _userPic = snapshot.value.toString();
       });
     });
   }
@@ -63,19 +63,19 @@ class _HostelDetailPageState extends State<HostelDetailPage> {
                             child:
                             widget.data[widget.index].hostel_pic == null
                                 ? Image.asset(
-                                    'assets/na.jpg',
-                                    fit: BoxFit.cover,
-                                  )
+                              'assets/na.jpg',
+                              fit: BoxFit.cover,
+                            )
                                 : FadeInImage(
-                                    width: double.infinity,
-                                    height: double.infinity,
-                                    image: NetworkImage(
-                                      widget.data[widget.index].hostel_pic,
-                                    ),
-                                    fit: BoxFit.cover,
-                                    placeholder:
-                                        AssetImage('assets/loading.gif'),
-                                  ),
+                              width: double.infinity,
+                              height: double.infinity,
+                              image: NetworkImage(
+                                widget.data[widget.index].hostel_pic,
+                              ),
+                              fit: BoxFit.cover,
+                              placeholder:
+                              AssetImage('assets/loading.gif'),
+                            ),
                           ),
                           Container(
                             decoration: BoxDecoration(
@@ -123,18 +123,6 @@ class _HostelDetailPageState extends State<HostelDetailPage> {
                           Navigator.pop(context);
                         },
                       ),
-                      actions: <Widget>[
-                        FlatButton(
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => AddRoomPage(widget.data[widget.index].hostel_id)));
-                          },
-                          child: Text("ADD ROOM",
-                              style: TextStyle(color: state.themeData.accentColor, fontSize: 20.0, fontWeight: FontWeight.bold)),
-                        )
-                      ],
                     ),
                     Expanded(
                       child: Container(
@@ -146,7 +134,7 @@ class _HostelDetailPageState extends State<HostelDetailPage> {
                               height: double.infinity,
                               child: Padding(
                                 padding:
-                                    const EdgeInsets.fromLTRB(16, 75, 16, 16),
+                                const EdgeInsets.fromLTRB(16, 75, 16, 16),
                                 child: Card(
                                   elevation: 5,
                                   shape: RoundedRectangleBorder(
@@ -157,14 +145,14 @@ class _HostelDetailPageState extends State<HostelDetailPage> {
                                     children: <Widget>[
                                       Padding(
                                         padding:
-                                            const EdgeInsets.only(left: 120.0),
+                                        const EdgeInsets.only(left: 120.0),
                                         child: Padding(
                                           padding: const EdgeInsets.all(8.0),
                                           child: Column(
                                             mainAxisAlignment:
-                                                MainAxisAlignment.start,
+                                            MainAxisAlignment.start,
                                             crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                            CrossAxisAlignment.start,
                                             children: <Widget>[
                                               Text(
                                                 widget.data[widget.index]
@@ -176,7 +164,7 @@ class _HostelDetailPageState extends State<HostelDetailPage> {
                                               ),
                                               Padding(
                                                 padding:
-                                                    const EdgeInsets.all(8.0),
+                                                const EdgeInsets.all(8.0),
                                                 child: Row(
                                                   children: <Widget>[
                                                     Text(
@@ -200,17 +188,17 @@ class _HostelDetailPageState extends State<HostelDetailPage> {
                                           physics: BouncingScrollPhysics(),
                                           child: Column(
                                             crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                            CrossAxisAlignment.start,
                                             children: <Widget>[
                                               Padding(
                                                   padding: const EdgeInsets
-                                                          .symmetric(
+                                                      .symmetric(
                                                       horizontal: 15.0,
                                                       vertical: 15.0),
                                                   child: Column(
                                                     crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
+                                                    CrossAxisAlignment
+                                                        .start,
                                                     children: <Widget>[
                                                       Text(
                                                         'Facilities',
@@ -222,7 +210,7 @@ class _HostelDetailPageState extends State<HostelDetailPage> {
                                                         child: Text(
                                                           widget
                                                               .data[
-                                                                  widget.index]
+                                                          widget.index]
                                                               .hostel_facilities,
                                                           style: state
                                                               .themeData
@@ -234,7 +222,7 @@ class _HostelDetailPageState extends State<HostelDetailPage> {
                                                   )),
                                               Padding(
                                                   padding: const EdgeInsets
-                                                          .symmetric(
+                                                      .symmetric(
                                                       horizontal: 10.0,
                                                       vertical: 10.0),
                                                   child: Column(
@@ -253,7 +241,7 @@ class _HostelDetailPageState extends State<HostelDetailPage> {
                                                             child: Text(
                                                               widget
                                                                   .data[widget
-                                                                      .index]
+                                                                  .index]
                                                                   .location_name,
                                                               style: state
                                                                   .themeData
@@ -278,7 +266,7 @@ class _HostelDetailPageState extends State<HostelDetailPage> {
                                                             child: Text(
                                                               widget
                                                                   .data[widget
-                                                                      .index]
+                                                                  .index]
                                                                   .provider_name,
                                                               style: state
                                                                   .themeData
@@ -303,7 +291,7 @@ class _HostelDetailPageState extends State<HostelDetailPage> {
                                                             child: Text(
                                                               widget
                                                                   .data[widget
-                                                                      .index]
+                                                                  .index]
                                                                   .no_of_room,
                                                               style: state
                                                                   .themeData
@@ -328,7 +316,7 @@ class _HostelDetailPageState extends State<HostelDetailPage> {
                                                             child: Text(
                                                               widget
                                                                   .data[widget
-                                                                      .index]
+                                                                  .index]
                                                                   .price_per_head,
                                                               style: state
                                                                   .themeData
@@ -353,7 +341,7 @@ class _HostelDetailPageState extends State<HostelDetailPage> {
                                                             child: Text(
                                                               widget
                                                                   .data[widget
-                                                                      .index]
+                                                                  .index]
                                                                   .contact_number,
                                                               style: state
                                                                   .themeData
@@ -366,7 +354,7 @@ class _HostelDetailPageState extends State<HostelDetailPage> {
                                                       SizedBox(height: 10.0),
                                                     ],
                                                   )),
-                                              ScrollingRooms(
+                                              ScrollingRoomsPage(
                                                 state,
                                                 widget.data,
                                                 widget.index,
@@ -392,7 +380,7 @@ class _HostelDetailPageState extends State<HostelDetailPage> {
                                     image: NetworkImage(_userPic),
                                     fit: BoxFit.cover,
                                     placeholder:
-                                        AssetImage('assets/loading.gif'),
+                                    AssetImage('assets/loading.gif'),
                                   ),
                                 ),
                               ),

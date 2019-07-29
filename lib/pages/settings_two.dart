@@ -5,6 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hostel_app/bloc/change_theme_bloc.dart';
 import 'package:hostel_app/bloc/change_theme_state.dart';
 
+import 'login_page.dart';
+
 class SettingsPageTwo extends StatefulWidget {
   @override
   _SettingsPageTwoState createState() => _SettingsPageTwoState();
@@ -40,6 +42,22 @@ class _SettingsPageTwoState extends State<SettingsPageTwo> {
         profileImage = snapshot.value["profile_pic"].toString();
       });
     });
+    reference.keepSynced(true);
+  }
+
+  _signOut() async {
+    try {
+      FirebaseAuth mAuth = FirebaseAuth.instance;
+      mAuth.signOut().then((val)=>{
+
+      });
+      Navigator.of(context).pushAndRemoveUntil(
+          new MaterialPageRoute(
+              builder: (BuildContext context) => LoginSignUpPage()),
+              (Route<dynamic> route) => false);
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override
@@ -76,100 +94,111 @@ class _SettingsPageTwoState extends State<SettingsPageTwo> {
                   ),
                   Expanded(
                     flex: 1,
-                    child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height,
-                      alignment: Alignment.bottomCenter,
-                      child: ListTile(
-                        title: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text(
-                              'Theme',
-                              style: state.themeData.textTheme.body2,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        FlatButton(
+                            child: Text('Logout',
+                                style: state.themeData.textTheme.body1),
+                            onPressed: _signOut),
+                        Container(
+                          width: MediaQuery.of(context).size.width,
+                          alignment: Alignment.bottomCenter,
+                          child: ListTile(
+                            title: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Text(
+                                  'Theme',
+                                  style: state.themeData.textTheme.body2,
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                        subtitle: SizedBox(
-                          height: 100,
-                          child: Center(
-                            child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              shrinkWrap: true,
-                              itemCount: 3,
-                              itemBuilder: (BuildContext context, int index) {
-                                return Stack(
-                                  children: <Widget>[
-                                    Column(
-                                      mainAxisSize: MainAxisSize.min,
+                            subtitle: SizedBox(
+                              height: 100,
+                              child: Center(
+                                child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  shrinkWrap: true,
+                                  itemCount: 3,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return Stack(
                                       children: <Widget>[
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Container(
-                                            width: 50,
-                                            height: 50,
-                                            decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                border: Border.all(
-                                                    width: 2,
-                                                    color: borders[index]),
-                                                color: colors[index]),
-                                          ),
+                                        Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: <Widget>[
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Container(
+                                                width: 50,
+                                                height: 50,
+                                                decoration: BoxDecoration(
+                                                    shape: BoxShape.circle,
+                                                    border: Border.all(
+                                                        width: 2,
+                                                        color: borders[index]),
+                                                    color: colors[index]),
+                                              ),
+                                            ),
+                                            Text(themes[index],
+                                                style: state
+                                                    .themeData.textTheme.body2)
+                                          ],
                                         ),
-                                        Text(themes[index],
-                                            style:
-                                                state.themeData.textTheme.body2)
-                                      ],
-                                    ),
-                                    Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: <Widget>[
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: InkWell(
-                                            onTap: () {
-                                              setState(() {
-                                                switch (index) {
-                                                  case 0:
-                                                    changeThemeBloc
-                                                        .onLightThemeChange();
-                                                    break;
-                                                  case 1:
-                                                    changeThemeBloc
-                                                        .onDarkThemeChange();
-                                                    break;
-                                                  case 2:
-                                                    changeThemeBloc
-                                                        .onAmoledThemeChange();
-                                                    break;
-                                                }
-                                              });
-                                            },
-                                            child: Container(
-                                              width: 50,
-                                              height: 50,
-                                              child:
-                                                  state.themeData.primaryColor ==
+                                        Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: <Widget>[
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: InkWell(
+                                                onTap: () {
+                                                  setState(() {
+                                                    switch (index) {
+                                                      case 0:
+                                                        changeThemeBloc
+                                                            .onLightThemeChange();
+                                                        break;
+                                                      case 1:
+                                                        changeThemeBloc
+                                                            .onDarkThemeChange();
+                                                        break;
+                                                      case 2:
+                                                        changeThemeBloc
+                                                            .onAmoledThemeChange();
+                                                        break;
+                                                    }
+                                                  });
+                                                },
+                                                child: Container(
+                                                  width: 50,
+                                                  height: 50,
+                                                  child: state.themeData
+                                                              .primaryColor ==
                                                           colors[index]
                                                       ? Icon(Icons.done,
                                                           color: state.themeData
                                                               .accentColor)
                                                       : Container(),
+                                                ),
+                                              ),
                                             ),
-                                          ),
+                                            Text(themes[index],
+                                                style: state
+                                                    .themeData.textTheme.body2)
+                                          ],
                                         ),
-                                        Text(themes[index],
-                                            style:
-                                                state.themeData.textTheme.body2)
                                       ],
-                                    ),
-                                  ],
-                                );
-                              },
+                                    );
+                                  },
+                                ),
+                              ),
                             ),
                           ),
                         ),
-                      ),
+                      ],
                     ),
                   )
                 ],

@@ -6,6 +6,7 @@ import 'package:hostel_app/bloc/change_theme_bloc.dart';
 import 'package:hostel_app/bloc/change_theme_state.dart';
 
 import 'login_page.dart';
+import 'my_room_page.dart';
 
 class SettingsPageTwo extends StatefulWidget {
   @override
@@ -79,9 +80,21 @@ class _SettingsPageTwoState extends State<SettingsPageTwo> {
                       accountName: Text(
                           profileName == null ? "Loading..." : profileName,
                           style: state.themeData.textTheme.display1),
-                      accountEmail: Text(
-                          profileEmail == null ? "Loading..." : profileEmail,
-                          style: state.themeData.textTheme.display2),
+                      accountEmail: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text(
+                              profileEmail == null ? "Loading..." : profileEmail,
+                              style: state.themeData.textTheme.display2),
+                          InkWell(
+                              child: Padding(
+                                padding: const EdgeInsets.only(right: 15.0),
+                                child: Text('Log Out',
+                                    style: state.themeData.textTheme.body1),
+                              ),
+                              onTap: _signOut),
+                        ],
+                      ),
                       currentAccountPicture: CircleAvatar(
                         backgroundColor: state.themeData.primaryColor,
                         foregroundColor: state.themeData.primaryColor,
@@ -98,9 +111,12 @@ class _SettingsPageTwoState extends State<SettingsPageTwo> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         FlatButton(
-                            child: Text('Logout',
-                                style: state.themeData.textTheme.body1),
-                            onPressed: _signOut),
+                            child: Text('My Room',
+                                style: state.themeData.textTheme.headline),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=> MyRoomPage()));
+                            }),
                         Container(
                           width: MediaQuery.of(context).size.width,
                           alignment: Alignment.bottomCenter,

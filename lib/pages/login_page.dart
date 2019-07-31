@@ -170,7 +170,7 @@ class _LoginSignUpPageState extends State<LoginSignUpPage> {
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
         margin: EdgeInsets.only(bottom: 20.0),
-        child: CircularProgressIndicator(),
+        child: Container( width: 40.0, height: 40.0, child: CircularProgressIndicator()),
         alignment: Alignment.bottomCenter,
       );
     }

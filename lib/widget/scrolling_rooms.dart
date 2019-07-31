@@ -37,6 +37,7 @@ class _ScrollingRoomsState extends State<ScrollingRooms> {
           data[singleKey]["floor_num"],
           data[singleKey]["hostel_id"],
           data[singleKey]["occupancy"],
+          data[singleKey]["request_type"],
           data[singleKey]["room_id"],
           data[singleKey]["room_num"],
           data[singleKey]["room_pic"],

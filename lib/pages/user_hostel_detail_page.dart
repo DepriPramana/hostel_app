@@ -58,9 +58,9 @@ class _UserHostelDetailPageState extends State<UserHostelDetailPage> {
                     Expanded(
                       child: Stack(
                         children: <Widget>[
-                          Hero(
-                            tag: widget.data[widget.index].hostel_pic,
-                            child:
+//                          Hero(
+//                            tag: widget.data[widget.index].hostel_pic,
+//                            child:
                             widget.data[widget.index].hostel_pic == null
                                 ? Image.asset(
                               'assets/na.jpg',
@@ -76,7 +76,7 @@ class _UserHostelDetailPageState extends State<UserHostelDetailPage> {
                               placeholder:
                               AssetImage('assets/loading.gif'),
                             ),
-                          ),
+//                          ),
                           Container(
                             decoration: BoxDecoration(
                                 color: Colors.white,

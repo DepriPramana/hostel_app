@@ -56,7 +56,8 @@ class _AddRoomPageState extends State<AddRoomPage> {
         "occupancy": _capacity,
         "room_pic": downloadUrl,
         "hostel_id": widget.hostelId,
-        "room_id": _roomId
+        "room_id": _roomId,
+        "request_type": "not_requested"
       };
       reference.child("Rooms").child(_roomId).set(data).whenComplete(()=> "Uploaded");
       setState(() {
@@ -207,7 +208,7 @@ class _AddRoomPageState extends State<AddRoomPage> {
               appBar: AppBar(
                 backgroundColor: state.themeData.primaryColor,
                 title:
-                    Text("Add Room", style: state.themeData.textTheme.headline),
+                    Text("Add Room", style: state.themeData.textTheme.body1),
                 actions: <Widget>[
                   _isLoading
                       ? Container(

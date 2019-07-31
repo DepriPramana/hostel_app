@@ -422,7 +422,7 @@ class _AddDataPageState extends State<AddDataPage> {
             appBar: AppBar(
               backgroundColor: state.themeData.primaryColor,
               title:
-                  Text("Room Sharing App", style: state.themeData.textTheme.headline),
+                  Text("Room Sharing App", style: state.themeData.textTheme.body1),
               actions: <Widget>[
                 _isLoading
                     ? Container(

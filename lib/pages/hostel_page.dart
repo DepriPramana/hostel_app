@@ -16,7 +16,6 @@ class HostelPage extends StatefulWidget {
 
 class _HostelPageState extends State<HostelPage> {
   List<Hostels> _hostelList = [];
-  String _currentHostelId = "";
 
   Future fetchHostels() async {
     FirebaseUser currentUser = await FirebaseAuth.instance.currentUser();

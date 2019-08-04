@@ -87,9 +87,7 @@ class _LoginSignUpPageState extends State<LoginSignUpPage> {
         }
       } catch (e) {
         print('Error: $e');
-        setState(() {
-          _isLoading = false;
-        });
+        
       }
     }
   }

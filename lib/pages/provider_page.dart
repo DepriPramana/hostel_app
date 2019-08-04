@@ -42,8 +42,9 @@ class _ProviderPageState extends State<ProviderPage> {
 
   Future getRequestData() async {
     FirebaseUser currentUser = await FirebaseAuth.instance.currentUser();
+    String uId = currentUser.uid.toString();
     Query reference = await FirebaseDatabase.instance.reference().child("Requests");
-    reference.orderByChild("provider_id").equalTo(currentUser.uid.toString()).once().then((DataSnapshot snapshot){
+    reference.orderByChild("provider_id").equalTo(uId).once().then((DataSnapshot snapshot){
       if(snapshot != null) {
         var keys = snapshot.value.keys;
         for (var singleKey in keys) {
